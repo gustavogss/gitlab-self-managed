@@ -1,25 +1,23 @@
-version: "3.7"
+version: '3.8'
 
 services:
   gitlab:
-    image: gitlab/gitlab-ee:latest
+    image: 'gitlab/gitlab-ce:16.9.6-ce.0'  # Usando a versão especificada do GitLab CE
     container_name: gitlab
+    hostname: 'gitlab.example.com'
     restart: always
-    hostname: gitlab.local
     ports:
-      - "8929:8929"
-      - "8080:80"
-      - "2222:22"
+      - '5050:80'    # Porta HTTP mapeada para 5050 no host
+      - '443:443'    # Porta HTTPS
+      - '9022:22'    # Porta SSH mapeada para 9022 no host
     volumes:
-      - /srv/gitlab/config:/etc/gitlab
-      - /srv/gitlab/logs:/var/log/gitlab
-      - /srv/gitlab/data:/var/opt/gitlab
+      - '/srv/gitlab/config:/etc/gitlab'   # Persistência das configurações
+      - '/srv/gitlab/logs:/var/log/gitlab' # Persistência dos logs
+      - '/srv/gitlab/data:/var/opt/gitlab' # Persistência dos dados
     networks:
-      - gitlab_network
-    environment:
-      GITLAB_OMNITRIX_HOST: gitlab.local
-      GITLAB_OMNITRIX_PORT: 8929
+      - gitlab
 
 networks:
-  gitlab_network:
-    driver: bridge
+  gitlab:
+    external: true  # Usar a rede externa já existente chamada "gitlab"
+
