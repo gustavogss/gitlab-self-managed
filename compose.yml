@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ee:latest
+    container_name: gitlab
+    restart: always
+    hostname: gitlab.local
+    ports:
+      - "8929:8929"
+      - "8080:80"
+      - "2222:22"
+    volumes:
+      - /srv/gitlab/config:/etc/gitlab
+      - /srv/gitlab/logs:/var/log/gitlab
+      - /srv/gitlab/data:/var/opt/gitlab
+    networks:
+      - gitlab_network
+    environment:
+      GITLAB_OMNITRIX_HOST: gitlab.local
+      GITLAB_OMNITRIX_PORT: 8929
+
+networks:
+  gitlab_network:
+    driver: bridge
